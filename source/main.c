@@ -1,10 +1,12 @@
-#include <SDL3/SDL.h>
+// common.c included with graphics.h
+#include <graphics.h>
 #include <SDL3/SDL_main.h>
-
-#include <common.h>
 
 int main(int argc, char** argv)
 {
+    IN_FUNC;
+    Error retVal = FAIL;
+
     // Stores current opcode (2 bytes)
     uint16_t    opcode          = 0;
 
@@ -47,65 +49,19 @@ int main(int argc, char** argv)
     BYTE        key[16];
 
 
-    // SDL
-    SDL_Window* window = NULL;
-    SDL_Renderer* renderer = NULL;
-    int result = SDL_Init( SDL_INIT_VIDEO | SDL_INIT_EVENTS );
-    if( result < 0 )
+    // Graphics
+    graphicsData    graphicsObj;
+    if( SUCCESS == ( retVal = initGraphics( &graphicsObj ) ) )
     {
-        SDL_Log("SDL_Init error: %s", SDL_GetError());
-        return -1;
-    }
-
-    window = SDL_CreateWindow("SDL3 Hello World", 800, 600, 0);
-    if( NULL == window )
-    {
-        SDL_Log("SDL_CreateWindow error: %s", SDL_GetError());
-        return -2;
-    }
-
-    renderer = SDL_CreateRenderer(window, NULL);
-    if( NULL == renderer )
-    {
-        SDL_Log("SDL_CreateRenderer error: %s", SDL_GetError());
-        return -3;
-    }
-
-    SDL_Log("SDL3 initialized");
-
-    SDL_Event event;
-    int quit = 0;
-    while( !quit )
-    {
-        while( SDL_PollEvent( &event ) )
+        while( EVENT_QUIT != listenForEvent( &graphicsObj ) )
         {
-            switch( event.type )
-            {
-                case SDL_EVENT_QUIT:
-                    SDL_Log("SDL3 Event: Quit");
-                    quit = 1;
-                    break;
-
-                case SDL_EVENT_KEY_DOWN:
-                    if( event.key.scancode == SDL_SCANCODE_ESCAPE )
-                    {
-                        SDL_Log("SDL3 ESC Key: Quit");
-                        quit = 1;
-                    }
-            }
+            // Keep listening for event until a quit event has been registered
         }
 
-        SDL_SetRenderDrawColor( renderer, 0, 0, 255, 255 );
-        SDL_RenderClear( renderer );
-        SDL_RenderPresent( renderer );
-        // Give control back to OS in case it has to do something
-        SDL_Delay( 1 );
+        // Cleanup functions
+        retVal = cleanupGraphics( &graphicsObj );
     }
 
-    SDL_Log("SDL3 shutdown");
-    SDL_DestroyRenderer( renderer );
-    SDL_DestroyWindow( window );
-    SDL_Quit();
-
+    OUT_FUNC;
     return 0;
 }

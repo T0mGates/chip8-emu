@@ -5,13 +5,19 @@
 
 typedef enum
 {
+    // General
     SUCCESS                 = 0,
     FAIL                    = 1,
+    NULL_ARG                = 2,
+
     // SDL
-    SDL_INIT_FAIL           = 2,
-    SDL_WINDOW_FAIL         = 3,
-    SDL_RENDERER_FAIL       = 4,
-    EVENT_QUIT              = 5
+    SDL_INIT_FAIL           = 10,
+    SDL_WINDOW_FAIL         = 11,
+    SDL_RENDERER_FAIL       = 12,
+    EVENT_QUIT              = 13,
+
+    // CPU
+    PC_NO_INCREMENT         = 20
 }
 Error;
 

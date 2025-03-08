@@ -17,7 +17,7 @@ graphicsData;
 // =================================
 
 /*
- * @brief           Initiates a given graphics struct with a window and renderer. The given struct must be a pointer pointing to a vlid graphics struct
+ * @brief           Initiates a given graphics struct with a window and renderer. The given struct must be a pointer pointing to a valid graphics struct
  *
  * @param[out]      GraphicsObj         - the struct to populate with a proper window and renderer
  *

@@ -17,7 +17,7 @@ Error
     {
         retVal  = SDL_INIT_FAIL;
     }
-    else if( NULL == ( GraphicsObj->window = SDL_CreateWindow( "SDL3 Hello World", 800, 600, 0 ) ) )
+    else if( NULL == ( GraphicsObj->window = SDL_CreateWindow( "Chip8 Emu", 64 * PIXEL_SCALER_X, 32 * PIXEL_SCALER_Y, 0 ) ) )
     {
         retVal  = SDL_WINDOW_FAIL;
     }
@@ -30,7 +30,7 @@ Error
         retVal  = SUCCESS;
     }
 
-    SDL_Log("SDL3 Initialized!");
+    SDL_Log("SDL3 initialized");
 
     OUT_FUNC;
     return retVal;
@@ -62,6 +62,74 @@ Error
     return retVal;
 }
 
+Error
+    drawGraphics(IN chip8* Chip8Obj, OUT graphicsData* GraphicsObj)
+{
+    IN_FUNC;
+    Error retVal            = FAIL;
+
+    // Will be used to index our graphics array
+    unsigned int gfxIndex   = 0;
+
+    if( NULL == Chip8Obj )
+    {
+        DEBUG( "Chip8Obj is NULL!\n" );
+        retVal          = NULL_ARG;
+    }
+    else if( NULL == GraphicsObj )
+    {
+        DEBUG( "GraphicsObj is NULL!\n" );
+        retVal          = NULL_ARG;
+    }
+    else
+    {
+        // Set screen to the 'set bit' color, then fill in set bits with the 'set bit' color
+        SDL_SetRenderDrawColor( GraphicsObj->renderer, UNSET_BIT_COLOR, 255 );
+        // Clear the screen, set to RenderDrawColor's color
+        SDL_RenderClear( GraphicsObj->renderer );
+
+        // Set the next color to be the 'set bit' color
+        SDL_SetRenderDrawColor( GraphicsObj->renderer, SET_BIT_COLOR, 255 );
+        // Fill in set bits with black
+        for( unsigned int x = 0; x < 64; x++ )
+        {
+            for( unsigned int y = 0; y < 32; y++ )
+            {
+                gfxIndex    = ( y * 64 ) + x;
+
+                if( 1 == Chip8Obj->graphics[gfxIndex] )
+                {
+                    // bit is set, draw it (don't forget our scalers)
+                    for( unsigned int xScale = 0; xScale < PIXEL_SCALER_X; xScale++ )
+                    {
+                        for( unsigned int yScale = 0; yScale < PIXEL_SCALER_Y; yScale++ )
+                        {
+                            // I used to have this at + xScale and + yScale but found it better looking at - xScale and + yScale
+                            SDL_RenderPoint(  GraphicsObj->renderer,
+                                                ( x * PIXEL_SCALER_X )  - xScale,
+                                                ( y * PIXEL_SCALER_Y )  + yScale
+                            );
+                        }// for yScale
+                    }// for xScale
+                }// bit is set
+            }// for y
+        }// for x
+
+        // Update the screen
+        SDL_RenderPresent( GraphicsObj->renderer );
+
+        // Give control back to OS in case it has to do something
+        SDL_Delay( 1 );
+
+        retVal          = SUCCESS;
+    }// NULL args
+
+    OUT_FUNC;
+    return retVal;
+}
+
+
+// Not used
 Error
     listenForEvent(INOUT graphicsData* GraphicsObj)
 {

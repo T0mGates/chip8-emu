@@ -1,8 +1,11 @@
 #ifndef CPU_H
 #define CPU_H
 
-#include <common.h>
+// chip8.h inclues common.h
 #include <chip8.h>
+
+// Forward declare due to circular dependency
+struct chip8;
 
 // =================================
 // FUNCTIONS
@@ -17,7 +20,7 @@
  * @return          Error               - Either a success, or some error as defined the the Error enum
 */
 Error
-    ingestOpCode(IN uint16_t OpCode, INOUT chip8* Chip8Obj);
+    ingestOpCode(IN uint16_t OpCode, INOUT struct chip8* Chip8Obj);
 
 
 #endif

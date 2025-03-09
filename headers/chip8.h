@@ -3,8 +3,9 @@
 
 #include <common.h>
 #include <cpu.h>
+#include <windows.h>
 
-typedef struct Chip8
+typedef struct chip8
 {
     // RAM (4KB)
     BYTE        ram[4096];
@@ -13,7 +14,7 @@ typedef struct Chip8
     BYTE        registers[16];
 
     // Index register (0x000 - 0xFFF) - 12 bits, but allocate 16
-    uint16_t    registerIndex;
+    uint16_t    indexRegister;
 
     // Program counter (0x000 - 0xFFF) - 12 bits, but allocate 16
     uint16_t    programCounter;
@@ -27,6 +28,7 @@ typedef struct Chip8
 
     // Black and white, screen is 2048 pixels (64x32)
     // each pixel is 'set' or 'unset'
+    // Starts top-left
     BYTE        graphics[64 * 32];
 
     // Timer registers - count at 60Hz
@@ -36,14 +38,17 @@ typedef struct Chip8
     BYTE        soundTimer;
 
     // Stack of 16 bytes, to remember where we previously were in memory before jumping somewhere else
-    BYTE        stack[16];
+    uint16_t    stack[16];
     // Need a way to know where we are in our stack
-    BYTE        stackPointer;
+    uint16_t    stackPointer;
 
     // Hex based keypad (0x0 - 0xF)
-    // use array to store current state of key
-    BYTE        key[16];
-}
+    // use array to store current state of keys (pressed or not pressed)
+    bool        keys[16];
+
+    // Flag to update the screen
+    bool        updateScreen;
+}// chip8
 chip8;
 
 // =================================
@@ -69,5 +74,26 @@ Error
 */
 Error
     emulateCycle(INOUT chip8* Chip8Obj);
+
+/*
+ * @brief           Loads in a given game file
+ *
+ * @param[in]       GameFilePath        - The path to the game file
+ * @param[out]      Chip8Obj            - the struct to edit data for as we read in the game file
+ *
+ * @return          Error               - Either a success, or some error as defined the the Error enum
+*/
+Error
+    loadGame(OUT chip8* Chip8Obj, IN char* GameFilePath);
+
+/*
+ * @brief           Play a beeping sound
+ *
+ * @param[in]       NumCycles           - How many 'cycles' to play the sound for
+ *
+ * @return          Error               - Either a success, or some error as defined the the Error enum
+*/
+Error
+    playBeep(IN uint8_t NumCycles);
 
 #endif

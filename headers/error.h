@@ -9,6 +9,7 @@ typedef enum
     SUCCESS                 = 0,
     FAIL                    = 1,
     NULL_ARG                = 2,
+    GAME_FILE_NOT_FOUND     = 3,
 
     // SDL
     SDL_INIT_FAIL           = 10,

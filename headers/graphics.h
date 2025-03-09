@@ -1,8 +1,15 @@
 #ifndef GRAPHICS_H
 #define GRAPHICS_H
 
-#include <common.h>
+// chip8.h includes common.h
+#include <chip8.h>
 #include <SDL3/SDL.h>
+
+#define PIXEL_SCALER_X      14
+#define PIXEL_SCALER_Y      14
+
+#define SET_BIT_COLOR       255, 255, 255
+#define UNSET_BIT_COLOR     0, 0, 0
 
 typedef struct Graphics
 {
@@ -35,6 +42,17 @@ Error
 */
 Error
     cleanupGraphics(OUT graphicsData* GraphicsObj);
+
+/*
+ * @brief           Renders graphics given the current state of the graphics array found in the given chip8 struct
+ *
+ * @param[in]       Chip8Obj            - the struct containing the chip8 data
+ * @param[out]      GraphicsObj         - the struct containing the rendering/graphical data
+ *
+ * @return          Error               - Either a success, or some error as defined the the Error enum
+*/
+Error
+    drawGraphics(IN chip8* Chip8Obj, OUT graphicsData* GraphicsObj);
 
 /*
  * @brief           Hangs until an event is received, will then do an action depending on the received event

@@ -124,6 +124,11 @@ int main(int argc, char** argv)
             }// loadGame
         }// initChip8
 
+        if( GAME_FILE_NOT_FOUND == retVal )
+        {
+            fprintf( stderr, "File at path: %s does not exist\n", argv[1] );
+        }// GAME_FILE_NOT_FOUND
+
         // Cleanup functions
         retVal = cleanupGraphics( &graphicsObj );
     }// initGraphics

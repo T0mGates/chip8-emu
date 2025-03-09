@@ -104,9 +104,9 @@ Error
                     {
                         for( unsigned int yScale = 0; yScale < PIXEL_SCALER_Y; yScale++ )
                         {
-                            // I used to have this at + xScale and + yScale but found it better looking at - xScale and + yScale
+                            // Can mess with +/- on the scales... works differently with different games I find
                             SDL_RenderPoint(  GraphicsObj->renderer,
-                                                ( x * PIXEL_SCALER_X )  - xScale,
+                                                ( x * PIXEL_SCALER_X )  + xScale,
                                                 ( y * PIXEL_SCALER_Y )  + yScale
                             );
                         }// for yScale

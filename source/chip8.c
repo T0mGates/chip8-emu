@@ -164,7 +164,7 @@ Error
             fileSize                        = ftell( fptr );
             fseek( fptr, 0, SEEK_SET );
 
-            printf( "Game's fileSize: %d bytes\nPC should not go out of these bounds: 0 to 79 (fonts) and %d to %d (game)\n", fileSize, 0x200, 0x200 + fileSize - 1 );
+            DEBUG( "Game's fileSize: %d bytes\nPC should not go out of these bounds: 0 to 79 (fonts) and %d to %d (game)\n", fileSize, 0x200, 0x200 + fileSize - 1 );
 
             BYTE            buffer[fileSize];
 
